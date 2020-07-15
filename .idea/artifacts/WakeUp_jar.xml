@@ -3,7 +3,6 @@
     <output-path>E:/Programmation/PluginMC/WakeUp</output-path>
     <root id="archive" name="WakeUp.jar">
       <element id="module-output" name="WakeUp" />
-      <element id="extracted-dir" path="E:/Programmation/PluginMC/Spigot/spigot-1.16.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

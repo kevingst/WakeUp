@@ -1,4 +1,5 @@
 name: WakeUp
-version: 1.9
+version: 1.2.11
 author: Kriiox
 main: fr.kriiox.wakeup.WakeUpMain
+api-version: 1.16
