@@ -4,7 +4,6 @@ import fr.kriiox.wakeup.WakeUpMain;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,10 +23,8 @@ public class BedListeners implements Listener {
             main.updateBossBar();
             main.sleepingBar.addPlayer(player);
         }
-
-        if(player.getGameMode() == GameMode.SURVIVAL){
-            main.playerPlayed.add(player);
-        }
+        main.playerMove.put(player.getUniqueId(), System.currentTimeMillis());
+        main.updatePlayerCanSleep();
     }
 
     @EventHandler
@@ -37,25 +34,25 @@ public class BedListeners implements Listener {
             main.updateBossBar();
             main.sleepingBar.removePlayer(player);
         }
-
-        if(main.getPlayerPlayed().contains(player)){
-            main.playerPlayed.remove(player);
-        }
+        main.playerAFK.remove(player);
+        main.updatePlayerCanSleep();
     }
 
     @EventHandler
     public void onChangeGameMode(PlayerGameModeChangeEvent event){
+        main.updatePlayerCanSleep();
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        GameMode gm = event.getNewGameMode();
-
-        if(gm.equals(GameMode.SURVIVAL)){
-            main.playerPlayed.add(player);
-        } else {
-            if(main.getPlayerPlayed().contains(player)){
-                main.playerPlayed.remove(player);
-            }
+        main.playerMove.put(player.getUniqueId(), System.currentTimeMillis());
+        if(main.playerAFK.contains(player)){
+            main.playerAFK.remove(player);
+            main.playerCanSleep.add(player);
+            player.setPlayerListName(player.getName());
+            Bukkit.broadcastMessage("§b" + player.getName() + " §fn'est plus AFK.");
         }
-
     }
 
     @EventHandler
@@ -64,9 +61,9 @@ public class BedListeners implements Listener {
 
         if (event.getBedEnterResult() != PlayerBedEnterEvent.BedEnterResult.OK) return;
 
-        if(!playerEvent.getGameMode().equals(GameMode.SURVIVAL)) return;
+        main.updatePlayerCanSleep();
 
-        if(!main.getPlayerSpleep().contains(playerEvent)) main.getPlayerSpleep().add(playerEvent);
+        if(!main.getPlayerSpleep().contains(playerEvent) && main.getPlayerCanSleep().contains(playerEvent)) main.getPlayerSpleep().add(playerEvent);
 
         main.updateBossBar();
         for (Player players : Bukkit.getOnlinePlayers()) {
@@ -83,9 +80,8 @@ public class BedListeners implements Listener {
     public void onBedLeave(PlayerBedLeaveEvent event){
         Player player = event.getPlayer();
 
-        if(!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-
         main.getPlayerSpleep().remove(player);
+        main.updatePlayerCanSleep();
         main.updateBossBar();
     }
 }
