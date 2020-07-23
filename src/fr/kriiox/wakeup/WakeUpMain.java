@@ -1,6 +1,5 @@
 package fr.kriiox.wakeup;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import fr.kriiox.wakeup.listeners.BedListeners;
 import fr.kriiox.wakeup.task.AccelerateNightTask;
 import org.bukkit.Bukkit;
@@ -27,6 +26,8 @@ public class WakeUpMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new BedListeners(this), this);
 
@@ -42,12 +43,12 @@ public class WakeUpMain extends JavaPlugin {
     private void checkPlayerMove(Player player) {
         if(playerMove.containsKey(player.getUniqueId())) {
             long ms = playerMove.get(player.getUniqueId());
-            if (System.currentTimeMillis() - ms >= 300000) {
+            if (System.currentTimeMillis() - ms >= getConfig().getInt("afk.time")) {
                 if(!playerAFK.contains(player)) {
                     playerAFK.add(player);
                     playerCanSleep.remove(player);
                     player.setPlayerListName("§7[AFK] "+player.getName());
-                    Bukkit.broadcastMessage("§b" + player.getName() + " §fest AFK.");
+                    Bukkit.broadcastMessage("§b" + player.getName() + " §f"+getConfig().getString("afk.isAfk"));
                 }
             }
         }
@@ -64,7 +65,7 @@ public class WakeUpMain extends JavaPlugin {
     }
 
     public void updateBossBar(){
-        sleepingBar.setTitle("Passer la nuit [ "+getPlayerSpleep().size() + " / " + getPlayerCanSleep().size()+" ]");
+        sleepingBar.setTitle(getConfig().getString("bossbar-message") + " [" +getPlayerSpleep().size() + " / " + getPlayerCanSleep().size()+"]");
         sleepingBar.setProgress(getSleepingValue());
 
         if(getPlayerSpleep().size() == 0){ sleepingBar.removeAll(); }

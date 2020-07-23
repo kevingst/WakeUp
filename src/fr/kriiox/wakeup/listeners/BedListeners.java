@@ -51,7 +51,7 @@ public class BedListeners implements Listener {
             main.playerAFK.remove(player);
             main.playerCanSleep.add(player);
             player.setPlayerListName(player.getName());
-            Bukkit.broadcastMessage("§b" + player.getName() + " §fn'est plus AFK.");
+            Bukkit.broadcastMessage("§b" + player.getName() + " §f"+main.getConfig().getString("afk.noLongerAfk"));
         }
     }
 
@@ -68,7 +68,7 @@ public class BedListeners implements Listener {
         main.updateBossBar();
         for (Player players : Bukkit.getOnlinePlayers()) {
             main.sleepingBar.addPlayer(players);
-            players.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§b"+playerEvent.getName() + " §fest dans un lit."));
+            players.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§b"+playerEvent.getName() + " §f"+main.getConfig().getString("actionbar-message")));
         }
 
         if(main.getSleepingValue() >= 0.5){

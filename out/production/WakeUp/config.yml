@@ -1,0 +1,11 @@
+# This is a message when the player gets into a bed.
+bossbar-message: "Passer la nuit"
+actionbar-message: "est dans un lit."
+
+afk:
+  # This is a message when player is AFK.
+  isAfk: "est maintenant AFK."
+  # This is a message when the player is no longer AFK.
+  noLongerAfk: "n'est plus AFK."
+  # After how long the player becomes an AFK player.
+  time: 300000
