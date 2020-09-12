@@ -7,5 +7,5 @@ afk:
   isAfk: "est maintenant AFK."
   # This is a message when the player is no longer AFK.
   noLongerAfk: "n'est plus AFK."
-  # After how long the player becomes an AFK player.
+  # After how long the player becomes an AFK player (ms).
   time: 300000
