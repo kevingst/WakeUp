@@ -23,7 +23,6 @@ public class WakeUpMain extends JavaPlugin {
     public List<Player> playerAFK = new ArrayList<>();
     public BossBar sleepingBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID, new BarFlag[0]);
 
-
     @Override
     public void onEnable() {
         saveDefaultConfig();
