@@ -19,28 +19,36 @@ public class BedListeners implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        if(main.getPlayerSpleep().size() != 0){
+
+        main.updatePlayerCanSleep();
+        Bukkit.broadcastMessage(main.getPlayerCanSleep() + "");
+
+        if(main.getPlayerSpleep().size() !=0) {
             main.updateBossBar();
             main.sleepingBar.addPlayer(player);
         }
+
         main.playerMove.put(player.getUniqueId(), System.currentTimeMillis());
-        main.updatePlayerCanSleep();
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        if(main.getPlayerSpleep().size() != 0){
-            main.updateBossBar();
-            main.sleepingBar.removePlayer(player);
-        }
-        main.playerAFK.remove(player);
         main.updatePlayerCanSleep();
+        Bukkit.broadcastMessage(main.getPlayerCanSleep() + "");
+
+        if(main.getPlayerSpleep().size() !=0) {
+            main.updateBossBar();
+            main.sleepingBar.addPlayer(player);
+        }
+
+        main.playerAFK.remove(player);
     }
 
     @EventHandler
     public void onChangeGameMode(PlayerGameModeChangeEvent event){
         main.updatePlayerCanSleep();
+        main.updateBossBar();
     }
 
     @EventHandler
@@ -63,7 +71,7 @@ public class BedListeners implements Listener {
 
         main.updatePlayerCanSleep();
 
-        if(!main.getPlayerSpleep().contains(playerEvent) && main.getPlayerCanSleep().contains(playerEvent)) main.getPlayerSpleep().add(playerEvent);
+        if(!main.getPlayerSpleep().contains(playerEvent) && main.getPlayerCanSleep().contains(playerEvent)) main.playerSpleep.add(playerEvent);
 
         main.updateBossBar();
         for (Player players : Bukkit.getOnlinePlayers()) {

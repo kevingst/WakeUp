@@ -1,7 +1,6 @@
 package fr.kriiox.wakeup;
 
 import fr.kriiox.wakeup.listeners.BedListeners;
-import fr.kriiox.wakeup.task.AccelerateNightTask;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -17,7 +16,7 @@ import java.util.*;
 
 public class WakeUpMain extends JavaPlugin {
 
-    private final List<Player> playerSpleep = new ArrayList<>();
+    public List<Player> playerSpleep = new ArrayList<>();
     public List<Player> playerCanSleep = new ArrayList<>();
     public Map<UUID, Long> playerMove = new HashMap<>();
     public List<Player> playerAFK = new ArrayList<>();
@@ -54,8 +53,8 @@ public class WakeUpMain extends JavaPlugin {
     }
 
     public void skipNight(){
-        AccelerateNightTask accelerateNightTask = new AccelerateNightTask();
-        accelerateNightTask.runTaskTimer(this, 1, 1);
+        //AccelerateNightTask accelerateNightTask = new AccelerateNightTask();
+        //accelerateNightTask.runTaskTimer(this, 1, 1);
     }
 
     public double getSleepingValue(){
@@ -79,14 +78,16 @@ public class WakeUpMain extends JavaPlugin {
     public void updatePlayerCanSleep(){
         World world = Bukkit.getWorld("world");
         playerCanSleep.clear();
+
         for(Player player : world.getPlayers()) {
+            playerCanSleep.add(player);
             if(player.getGameMode() != GameMode.SURVIVAL) {
                 playerCanSleep.remove(player);
-            } else if (playerAFK.contains(player)){
+            }
+            if (playerAFK.contains(player)){
                 playerCanSleep.remove(player);
-            } else {
-                playerCanSleep.add(player);
             }
         }
     }
+
 }
